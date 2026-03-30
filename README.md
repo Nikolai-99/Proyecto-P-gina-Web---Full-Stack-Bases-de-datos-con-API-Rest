@@ -1,5 +1,6 @@
-Pokémon TCG Web Experience | Zero-JS CSS Architecture
-A proof-of-concept interactive web application demonstrating advanced UI/UX patterns, state management, and 3D rendering relying exclusively on declarative CSS and HTML.
+# | Pokémon TCG Web Experience | 
+
+Zero-JS CSS Architecture A proof-of-concept interactive web application demonstrating advanced UI/UX patterns, state management, and 3D rendering relying exclusively on declarative CSS and HTML.
 
 Este proyecto prescinde por completo de JavaScript, utilizando características de vanguardia de CSS (como :has() y Scroll-driven Animations) para manejar lógica de estado compleja que tradicionalmente requeriría un framework de JS.
 
