@@ -414,4 +414,3 @@ def get_leaderboard(db: Session = Depends(get_db)):
 # Esto debe ir AL FINAL para no interferir con los endpoints de la API.
 # Permite que archivos como app.js y styles.css sean accesibles directamente.
 app.mount("/", StaticFiles(directory=root_dir), name="main_static")
-

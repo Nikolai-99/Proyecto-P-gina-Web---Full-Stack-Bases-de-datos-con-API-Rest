@@ -34,7 +34,7 @@ class UserOut(BaseModel):
     email:      EmailStr
     victories:  int = 0
     is_admin:   bool = False
-    
+
     # Lista de IDs de cartas que el usuario tiene como favoritas
     favorite_ids: List[int] = Field(default_factory=list)
     # Nombres de los pokemon favoritos
@@ -51,7 +51,7 @@ class UserOut(BaseModel):
             # Si es un objeto SQLAlchemy, extraemos los IDs
             fav_ids = [card.id for card in data.favorites]
             fav_names = [card.name for card in data.favorites]
-            
+
             # Si 'data' es un objeto, no podemos añadirle atributos fácilmente
             # así que lo convertimos a un diccionario compatible o usamos un wrapper
             if not isinstance(data, dict):

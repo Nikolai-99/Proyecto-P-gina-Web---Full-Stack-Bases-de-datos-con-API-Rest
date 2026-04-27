@@ -1080,5 +1080,4 @@ function initAdminPanel() {
   });
 }
 
-// Registrar initAdminPanel en la función init principal
 // Fin de app.js
