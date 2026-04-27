@@ -1,72 +1,114 @@
-# | Pokémon TCG Web Experience |
+# Pokémon TCG Web Experience: Full-Stack Integration
 
+**Pokémon TCG Web Experience** es una aplicación web interactiva de alto rendimiento que demuestra patrones avanzados de UI/UX, gestión de estado y renderizado 3D. Originalmente concebida como una prueba de concepto "Zero-JS", el proyecto ha evolucionado hacia una arquitectura **Full-Stack** moderna, integrando una lógica de cliente robusta y un backend potente.
 
-**Zero-JS CSS Architecture A proof-of-concept interactive web application** demonstrating advanced UI/UX patterns, state management, and 3D rendering relying exclusively on declarative CSS and HTML.
+---
 
-Este proyecto **prescinde por completo de JavaScript**, utilizando características de vanguardia de **CSS (como :has() y Scroll-driven Animations)** para manejar lógica de estado compleja que tradicionalmente requeriría un framework de JS.
+## 🚀 Ejecución y Despliegue
 
-**🏗️ Arquitectura y Decisiones Técnicas**: El objetivo principal de este proyecto es explorar los límites del CSSOM (CSS Object Model) moderno para la gestión de interfaces dinámicas, minimizando la carga en el hilo principal (Main Thread) al delegar las animaciones y transiciones a la GPU.
+La forma recomendada de iniciar el proyecto en Windows es mediante el archivo **`EJECUTAR_SERVIDOR.bat`** en la raíz, el cual realiza una verificación automática de dependencias y seguridad.
 
-1. Máquina de Estados Declarativa (Zero-JS State Management) En lugar de mutar el DOM imperativamente con JavaScript, el enrutamiento y el estado de los modales se gestionan mediante el Checkbox/Radio Button Hack combinado con el selector relacional :has().
+### Alternativa: Ejecución Manual
+Si prefieres iniciar el servidor manualmente desde la consola:
+1. Abre una terminal (`cmd` o `PowerShell`) en la carpeta **`backend/`**.
+2. Ejecuta uno de los siguientes comandos según tu necesidad:
 
-**Global State Container** Los input[type="radio"] ocultos en la raíz del actúan como el store de la aplicación.
+*   **Acceso Seguro (Solo Local):**
+    ```bash
+    uvicorn main:app --host 127.0.0.1 --port 8000 --reload
+    ```
+*   **Acceso en Red (Otros dispositivos) PRECAUCIÓN: Otros dispositivos podran acceder a este puerto, no es recomendable en redes no seguras como Wi-Fi públicos.**
 
-**Conditional Rendering:** Utilizando el combinador de hermanos (~) y pseudo-clases (:checked), el CSS inyecta estilos condicionales que montan o desmontan las "vistas" (.view-home, .view-packs, .view-cards) sin causar reflows costosos.
+    ```bash
+    uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    ```
 
-**Parent Selector Logic:** La pseudo-clase :has() permite que el contenedor principal (body) reaccione al estado de sus hijos, por ejemplo, aplicando overflow: hidden globalmente cuando un modal se abre.
+---
 
-2. Motor de Renderizado 3D y Efectos de Composición El proyecto implementa un modelo espacial para simular la interacción física con los sobres y las cartas:
+## 🏗️ Arquitectura y Decisiones Técnicas
 
-**Hardware Acceleration:** Las transformaciones 3D (rotateX, rotateY, scale) forzan la creación de capas de composición (composite layers), trasladando el cálculo gráfico a la GPU para mantener los 60 FPS estables.
+El proyecto se basa en una arquitectura de tres capas que prioriza el rendimiento, la escalabilidad y la experiencia de usuario premium.
 
-**Contextos de Apilamiento (Stacking Contexts):** Uso de transform-style: preserve-3d y perspective para mantener la coherencia espacial durante la rotación de las cartas (backface-visibility: hidden).
+### 1. Frontend: JavaScript Moderno y CSS de Vanguardia
+Aunque el proyecto utiliza **Vanilla JavaScript (ES6+)** para la lógica de negocio y la comunicación con el servidor, mantiene una base de CSS extremadamente avanzada para la gestión de la interfaz.
 
-**Holographic Foil Effect:** Implementado de forma procedural sin texturas pesadas, combinando gradientes dinámicos interpolados (linear-gradient con colores neón RGB), filter: blur(), y composición avanzada usando mix-blend-mode: color-dodge.
+*   **HTML Semántico:** Estructura basada en estándares de la W3C (`header`, `main`, `section`, `footer`) para asegurar accesibilidad y SEO.
+*   **Máquina de Estados Híbrida:** El enrutamiento y el estado de los modales se gestionan mediante una combinación de Radio Button Hack y selectores relacionales `:has()`, minimizando la necesidad de scripts para cambios visuales simples.
+*   **Gestión de Sesión:** Implementación de persistencia de inicio de sesión mediante `localStorage` y actualizaciones dinámicas del DOM sin recargas de página.
 
-3. Animaciones Impulsadas por Scroll (Scroll-driven Animations API) Se reemplazaron los Event Listeners de scroll de JS por la especificación nativa de CSS animation-timeline: scroll().
+### 2. Backend: API Restful con FastAPI
+El motor de la aplicación es un servidor **FastAPI (Python 3.12)** diseñado para ser ligero y extremadamente rápido.
 
-**Rendimiento:** Las animaciones vinculadas al scroll se ejecutan fuera del hilo principal, eliminando el jank (tartamudeo) típico asociado al cálculo de scrollTop en JS.
+*   **Puntos de Enlace (Endpoints):** Gestión completa de usuarios (Registro, Login, Perfil) mediante una API REST bien definida.
+*   **Validación de Datos:** Uso de modelos **Pydantic** para garantizar que los datos que fluyen entre el cliente y el servidor sean siempre válidos.
+*   **Seguridad:** Hashing de contraseñas mediante `bcrypt` y validación de unicidad de datos sensibles.
 
-Elementos clave como la barra de navegación superior y el logo principal utilizan keyframes interpolados directamente por la posición de desplazamiento del documento raíz (scroll(root)).
+### 3. Base de Datos: Persistencia SQL
+Se utiliza un motor **SQL (SQLite)** junto con el ORM **SQLAlchemy** para la gestión de datos.
 
-4. Layout Fluido y Adaptabilidad Extrema La interfaz es elástica y responde a viewports desde pantallas ultra-anchas hasta dispositivos móviles limitados (350px):
+*   **Modelos Relacionales:** Esquemas claros para la entidad Usuario.
+*   **Integridad:** Restricciones de base de datos para asegurar que los nombres de usuario y correos electrónicos sean únicos y consistentes.
 
-**CSS Grid & Flexbox:** Uso intensivo para layouts asimétricos (como la grilla de noticias) que mantienen proporciones (aspect-ratio) estrictas sin importar el tamaño del contenedor.
+---
 
-**Micro-interacciones:** Respuestas táctiles y de hover escalonadas usando curvas de interpolación Bézier (cubic-bezier(0.25, 1, 0.5, 1)) para simular físicas naturales.
+## 🚀 Módulos y Características Destacadas
 
-**📊 Beneficios de Rendimiento (Performance) TBT (Total Blocking Time) = 0ms:** Al no existir evaluación ni ejecución de scripts, el hilo principal queda libre inmediatamente tras el análisis del HTML y CSS.
+### 📖 Pokédex Dinámica
+La sección de la Pokédex está construida con **Vanilla JavaScript** y se renderiza de forma declarativa y dinámica a partir de un conjunto de datos en memoria. 
+*   **Filtrado en Tiempo Real:** Incorpora algoritmos de ordenamiento instantáneo (numérico y alfabético) sin recarga de página.
+*   **Carrusel Responsivo:** Utiliza control nativo de scroll suave (`scroll-behavior: smooth`) para navegar a través de la lista de Pokémon de forma intuitiva, optimizado con carga diferida de imágenes (`loading="lazy"`).
 
-**TTI (Time to Interactive):** Prácticamente equivalente al FCP (First Contentful Paint), ya que no hay hidratación (hydration) de frameworks.
+### ⚔️ Mini-Juego Interactivo (Pokémon Battle)
+Una micro-aplicación integrada en la arquitectura principal, desarrollada utilizando **React 18 + TypeScript** y empaquetada mediante **Vite**.
+*   **Inyección sin Iframes:** El juego se compila como un bundle autónomo (JS/CSS) e inyecta directamente en el DOM nativo de la aplicación. Esto asegura que la SPA original y React compartan el mismo hilo de ejecución, orígenes de seguridad y almacenamiento local (sesión de usuario).
+*   **Estética Retro:** Implementa la fuente *Press Start 2P*, diseño de menús tipo consola y sprites escalados matemáticamente utilizando `image-rendering: pixelated` para mantener una nitidez perfecta.
+*   **Arquitectura Orientada a Objetos:** Uso de interfaces en TypeScript para separar la lógica de los datos de combate de la capa de visualización.
+*   **Comunicación Backend:** Eventos y telemetría de las partidas se comunican directamente a los endpoints (`/api/game/stats`) de FastAPI.
 
-Seguridad: Inmunidad inherente a ataques XSS (Cross-Site Scripting) basados en manipulación del DOM vía scripts.
+### 🛠️ Panel de Administración (Modo Admin)
+El sistema incluye un módulo de administración integrado que permite a los supervisores monitorear la actividad de la comunidad en tiempo real.
 
-💻 **Requisitos del Entorno (Browser Support)** Dado el uso de especificaciones recientes de la W3C, se requiere un navegador moderno compatible con Chromium 115+, Safari 16.4+ o Firefox 121+:
+*   **Acceso Seguro:** Para activar las funciones administrativas, el usuario debe dirigirse a su **Perfil** y seleccionar el botón **"Iniciar modo administrador"**. 
+*   **Código Maestro:** Se requerirá el ingreso del código de seguridad: **`admin123`**. Una vez validado, el usuario es promovido a Administrador en la base de datos de forma persistente.
+*   **Panel de Control:** Un dashboard dedicado (overlay) que permite:
+    *   **Monitoreo de API:** Estado de conexión en tiempo real con el backend (`GET /api/users`).
+    *   **Gestión de Usuarios:** Listado completo de entrenadores registrados con sus respectivos IDs y correos.
+    *   **Visualización de Actividad:** Capacidad de ver el perfil detallado de cualquier usuario, incluyendo sus **Pokémon favoritos** y su contador de **victorias en el mini-juego**.
 
-**Soporte para :has() CSS pseudo-class.**
+---
 
-Soporte para animation-timeline.
+## 🎨 Motor de Renderizado y Efectos de Composición
 
-**🛠️ Despliegue Local Al** ser un proyecto estático sin dependencias, no requiere procesos de build ni gestores de paquetes (NPM/Yarn).
+La aplicación implementa un modelo espacial sofisticado para simular la interacción física con las cartas:
 
-Bash
+*   **Hardware Acceleration:** Las transformaciones 3D (`rotateX`, `rotateY`, `scale`) fuerzan la creación de capas de composición en la GPU, manteniendo 60 FPS estables incluso en dispositivos móviles.
+*   **Holographic Foil Effect:** Efecto procedimental que combina gradientes dinámicos neón, `filter: blur()`, y composición avanzada mediante `mix-blend-mode: color-dodge`.
+*   **Scroll-driven Animations:** Uso de la API nativa `animation-timeline: scroll()` para animaciones vinculadas al desplazamiento, eliminando el "jank" tradicional del scroll basado en JS.
 
-# 1. Clonar el repositorio
+---
 
-[](https://github.com/Nikolai-99/proyecto-web-html.css.only#1-clonar-el-repositorio)
+## 💻 Requisitos y Soporte
 
-git clone [https://github.com/tu-usuario/pokemon-tcg-css.git](https://github.com/tu-usuario/pokemon-tcg-css.git)
+*   **Navegador:** Compatible con Chromium 115+, Safari 16.4+ o Firefox 121+ (Soporte necesario para `:has()` y `animation-timeline`).
+*   **Entorno:** Python 3.12+ para el servidor backend.
 
-# 2. Navegar al directorio
+---
 
-[](https://github.com/Nikolai-99/proyecto-web-html.css.only#2-navegar-al-directorio)
+## 🛠️ Despliegue Local
 
-cd pokemon-tcg-css
+El proyecto está configurado para ejecutarse mediante un único lanzador principal que gestiona todas las dependencias y lanza el servidor, el cual a su vez sirve tanto la API como el frontend completo.
 
-# 3. Abrir en el navegador (ejemplo en macOS)
+```bash
+# En el directorio raíz del proyecto, ejecuta el script iniciador:
+python run.py
+```
 
-[](https://github.com/Nikolai-99/proyecto-web-html.css.only#3-abrir-en-el-navegador-ejemplo-en-macos)
+Al iniciarse con éxito, FastAPI montará automáticamente el directorio como recursos estáticos. Simplemente abre tu navegador y accede a:
+**`http://127.0.0.1:8000/`**
 
-open index.html (Opcional: Para una mejor experiencia de desarrollo, puedes usar extensiones como Live Server en VS Code).
+*(Nota: Si deseas modificar el código fuente del Mini-Juego en React, deberás ingresar a `web_mini_game/pokemon-battle` y ejecutar `npm run build` para que Vite actualice los activos que sirve FastAPI).*
 
-📄 Licencia y Descargo de Responsabilidad Este es un proyecto de ingeniería conceptual y de código abierto creado únicamente con fines educativos. 
+---
+
+## 📄 Licencia y Descargo de Responsabilidad
+Este es un proyecto de ingeniería conceptual y de código abierto creado únicamente con fines educativos. © 2026 Pokémon. © 1995–2026 Nintendo / Creatures Inc. / GAME FREAK inc.
