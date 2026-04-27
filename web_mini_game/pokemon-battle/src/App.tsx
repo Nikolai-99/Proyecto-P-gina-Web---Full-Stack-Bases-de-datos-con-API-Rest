@@ -52,7 +52,7 @@ function App() {
 
   const fetchLeaderboard = async () => {
     try {
-      const res = await fetch('http://127.0.0.1:8000/api/leaderboard');
+      const res = await fetch('/api/leaderboard');
       if (res.ok) {
         const data = await res.json();
         setLeaderboardData(data);
@@ -116,7 +116,7 @@ function App() {
       
       // Llamada simulada a la API
       if (userId) {
-        fetch('http://127.0.0.1:8000/api/game/stats', {
+        fetch('/api/game/stats', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ user_id: userId, is_victory: true })

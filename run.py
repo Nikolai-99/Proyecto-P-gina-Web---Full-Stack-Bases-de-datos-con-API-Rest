@@ -66,7 +66,7 @@ def err(text: str):
 def info(text: str):
     print(f"  {C.CYAN}[i]{C.ENDC}  {text}")
 
-def sep(char="─", width=60):
+def sep(char="-", width=60):
     print(f"  {C.DIM}{char * width}{C.ENDC}")
 
 def show_download_hint():
