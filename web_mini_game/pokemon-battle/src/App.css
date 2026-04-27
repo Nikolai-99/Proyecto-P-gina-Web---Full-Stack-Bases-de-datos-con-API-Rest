@@ -46,7 +46,7 @@ body {
 .battle-scene {
   flex: 2;
   position: relative;
-  background: url('/web_mini_game/pokemon-battle/dist/battle_background.png') center/cover no-repeat;
+  background: url('../battle_background.png') center/cover no-repeat;
   border-bottom: 2px solid var(--ui-border);
   overflow: hidden;
 }
