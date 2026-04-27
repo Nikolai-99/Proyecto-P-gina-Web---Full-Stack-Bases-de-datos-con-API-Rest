@@ -25,6 +25,22 @@ Si prefieres iniciar el servidor manualmente desde la consola:
 
 ---
 
+## 🔐 Credenciales de Prueba
+
+Para explorar las funcionalidades de la plataforma sin necesidad de registrarse, puede utilizar la siguiente cuenta de prueba:
+
+*   **Usuario:** `PokemonUser@pokemon.com`
+*   **Contraseña:** `pokeuser!!`
+
+### Acceso Administrativo
+Para establecer a un usuario como administrador dentro de la plataforma:
+1. Inicie sesión con cualquier cuenta (o la de prueba mencionada arriba).
+2. Diríjase a su **Perfil**.
+3. Seleccione **"Iniciar modo administrador"**.
+4. Ingrese el código maestro: **`admin123`**.
+
+---
+
 ## 🏗️ Arquitectura y Decisiones Técnicas
 
 El proyecto se basa en una arquitectura de tres capas que prioriza el rendimiento, la escalabilidad y la experiencia de usuario premium.
